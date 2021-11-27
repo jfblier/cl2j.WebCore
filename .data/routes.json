@@ -1,0 +1,20 @@
+[
+  {
+    "id": "home",
+    "pattern": {
+      "fr": "",
+      "en": "en"
+    },
+    "controller": "Home",
+    "action": "Index"
+  },
+  {
+    "id": "catalog",
+    "pattern": {
+      "fr": "catalogue",
+      "en": "catalog"
+    },
+    "controller": "Catalog",
+    "action": "Index"
+  }
+]
