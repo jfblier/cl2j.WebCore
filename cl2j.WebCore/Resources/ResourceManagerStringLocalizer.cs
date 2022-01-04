@@ -34,6 +34,16 @@ namespace cl2j.WebCore.Resources
             return DefaultLanguage;
         }
 
+        public string Localize(string resourceName, params object[] values)
+        {
+            var resourceValue = this[resourceName];
+
+            if (values != null && values.Length > 0)
+                return string.Format(resourceValue.Value, values);
+
+            return resourceValue.Value;
+        }
+
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
             var language = GetLanguage(httpContextAccessor.HttpContext.Request);

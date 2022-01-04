@@ -58,9 +58,9 @@ namespace cl2j.WebCore.Routes
         {
             var n = url.IndexOf("?");
             if (n >= 0)
-                url = url.Substring(n + 1);
+                url = url[(n + 1)..];
             if (url.StartsWith("/"))
-                url = url.Substring(1);
+                url = url[1..];
             url = url.ToLower();
             return url;
         }

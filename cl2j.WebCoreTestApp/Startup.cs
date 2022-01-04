@@ -12,7 +12,7 @@ namespace cl2j.WebCore
     public class Startup
     {
         private readonly IWebHostEnvironment environment;
-        private IConfigurationRoot configuration;
+        private readonly IConfigurationRoot configuration;
 
         public Startup(IWebHostEnvironment environment)
         {

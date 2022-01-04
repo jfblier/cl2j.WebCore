@@ -1,5 +1,4 @@
-﻿using cl2j.WebCore.Resources;
-using cl2j.WebCore.Routes;
+﻿using cl2j.WebCore.Routes;
 using Microsoft.AspNetCore.Html;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
@@ -8,6 +7,12 @@ namespace Microsoft.AspNetCore.Mvc.Rendering
 {
     public static class HtmlHelpers
     {
+        public static string Language(this IHtmlHelper htmlHelper)
+        {
+            var localizer = htmlHelper.GetStringLocalizer();
+            return localizer.GetLanguage(htmlHelper.ViewContext.HttpContext.Request);
+        }
+
         public static IHtmlContent Route(this IHtmlHelper htmlHelper, string routeName, string queryString = null)
         {
             var url = routeName;
@@ -52,9 +57,15 @@ namespace Microsoft.AspNetCore.Mvc.Rendering
             return new HtmlString(url);
         }
 
+        public static string Pluralize(int? count, string text)
+        {
+            return text + (count.HasValue && count > 1 ? "s" : string.Empty);
+        }
+
         public static IHtmlContent Localize(this IHtmlHelper htmlHelper, string resourceName, params object[] values)
         {
-            var resourceValue = Localize(htmlHelper, resourceName);
+            var localizer = htmlHelper.GetStringLocalizer();
+            var resourceValue = localizer?.Localize(resourceName, values);
 
             if (values != null && values.Length > 0)
                 resourceValue = string.Format(resourceValue, values);
@@ -76,19 +87,6 @@ namespace Microsoft.AspNetCore.Mvc.Rendering
             return "/" + url;
         }
 
-        private static string Localize(IHtmlHelper htmlHelper, string resourceName)
-        {
-            var localizer = htmlHelper.GetStringLocalizer();
-            if (localizer != null)
-            {
-                var resourceValue = localizer[resourceName];
-                if (resourceValue != null)
-                    return resourceValue.Value;
-            }
-
-            return resourceName;
-        }
-
         private static cl2j.WebCore.Resources.ResourceManagerStringLocalizer GetStringLocalizer(this IHtmlHelper htmlHelper)
         {
             var services = htmlHelper.ViewContext.HttpContext.RequestServices;
@@ -99,12 +97,6 @@ namespace Microsoft.AspNetCore.Mvc.Rendering
         {
             var services = htmlHelper.ViewContext.HttpContext.RequestServices;
             return services.GetService<IRouteService>();
-        }
-
-        private static IResourceService GetResourceService(this IHtmlHelper htmlHelper)
-        {
-            var services = htmlHelper.ViewContext.HttpContext.RequestServices;
-            return services.GetService<IResourceService>();
         }
 
         private static string GetLanguage(this IHtmlHelper htmlHelper)

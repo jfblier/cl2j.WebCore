@@ -43,7 +43,8 @@ namespace cl2j.WebCore.Routes
 
         public static async Task UseRoutesAsync(this IServiceProvider serviceProvider, Microsoft.AspNetCore.Routing.IEndpointRouteBuilder endpoints)
         {
-            var routes = await serviceProvider.GetRequiredService<IRouteService>().GetAllAsync();
+            var routeService = serviceProvider.GetRequiredService<IRouteService>();
+            var routes = await routeService.GetAllAsync();
             foreach (var route in routes)
             {
                 foreach (var kvpPattern in route.Pattern)

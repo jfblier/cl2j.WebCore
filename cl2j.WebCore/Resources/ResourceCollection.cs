@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using cl2j.Tooling;
+using System.Collections.Generic;
 
 namespace cl2j.WebCore.Resources
 {
     public class ResourceCollection
     {
-        private IDictionary<string, Localized<string>> values;
+        private readonly IDictionary<string, Localized<string>> values;
 
         public ResourceCollection(IDictionary<string, Localized<string>> resources)
         {
