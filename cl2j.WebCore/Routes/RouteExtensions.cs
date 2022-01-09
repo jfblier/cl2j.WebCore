@@ -21,17 +21,17 @@ namespace cl2j.WebCore.Routes
 
         public static void AddRoutes(this IServiceCollection services)
         {
-            services.AddSingleton<IDataStoreList<string, Route>>(builder =>
+            services.AddSingleton<IDataStore<string, Route>>(builder =>
             {
-                var logger = builder.GetRequiredService<ILogger<DataStoreCacheList<string, Route>>>();
+                var logger = builder.GetRequiredService<ILogger<DataStoreCache<string, Route>>>();
                 var fileStorageFactory = builder.GetRequiredService<IFileStorageFactory>();
                 var routeOptions = builder.GetRequiredService<IOptions<RouteOptions>>().Value;
                 var fileStorageProvider = fileStorageFactory.Get(routeOptions.DataStoreName);
                 if (fileStorageProvider == null)
                     throw new System.Exception($"RouteExtensions : DataStore '{routeOptions.DataStoreName}' not found");
 
-                var dataStore = new DataStoreListJson<string, Route>(fileStorageProvider, "routes.json", r => r.Id);
-                var dataStoreCache = new DataStoreCacheList<string, Route>("Routes", dataStore, routeOptions.RefreshInterval, r => r.Id, logger);
+                var dataStore = new DataStoreJson<string, Route>(fileStorageProvider, "routes.json", r => r.Id, logger);
+                var dataStoreCache = new DataStoreCache<string, Route>("Routes", dataStore, routeOptions.RefreshInterval, r => r.Id, logger);
 
                 return dataStoreCache;
             });

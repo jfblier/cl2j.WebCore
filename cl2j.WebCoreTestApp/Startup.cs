@@ -62,9 +62,6 @@ namespace cl2j.WebCore
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            //Add the FileStorgae Disk provider
-            app.ApplicationServices.UseFileStorageDisk();
-
             app.UseRouting();
 
             app.UseAuthorization();

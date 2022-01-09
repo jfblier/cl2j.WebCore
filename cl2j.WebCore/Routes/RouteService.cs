@@ -5,10 +5,10 @@ namespace cl2j.WebCore.Routes
 {
     public class RouteService : IRouteService
     {
-        private readonly IDataStoreList<string, Route> dataStore;
+        private readonly IDataStore<string, Route> dataStore;
         private readonly ILogger logger;
 
-        public RouteService(IDataStoreList<string, Route> dataStore, ILogger<RouteService> logger)
+        public RouteService(IDataStore<string, Route> dataStore, ILogger<RouteService> logger)
         {
             this.dataStore = dataStore;
             this.logger = logger;

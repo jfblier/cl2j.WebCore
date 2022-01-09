@@ -26,12 +26,15 @@ namespace cl2j.WebCore.Resources
                 {
                     var sw = Stopwatch.StartNew();
                     var fileStorageProvider = fileStorageFactory.Get(options.Value.DataStoreName);
+                    if (fileStorageProvider == null)
+                        throw new InvalidOperationException();
 
                     //Load each language resource file
                     var resources = new Dictionary<string, Localized<string>>();
                     foreach (var language in options.Value.Languages)
                     {
                         var resourcesOfLanguage = await fileStorageProvider.ReadJsonObjectAsync<Dictionary<string, string>>($"resources.{language}.json");
+
                         foreach (var kvp in resourcesOfLanguage)
                         {
                             if (resources.TryGetValue(kvp.Key, out var resource))
