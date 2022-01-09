@@ -4,7 +4,7 @@ namespace cl2j.WebCore
 {
     public static class NavigationHelpers
     {
-        public static string Domain { get; set; }
+        public static string Domain { get; set; } = "";
 
         public static string GetCanonicalUrl(this IUrlHelper url, string canonicalUrl)
         {

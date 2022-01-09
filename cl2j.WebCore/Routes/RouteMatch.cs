@@ -2,7 +2,7 @@
 {
     public class RouteMatch
     {
-        public Route Route { get; set; }
-        public string Language { get; set; }
+        public Route Route { get; set; } = null!;
+        public string Language { get; set; } = null!;
     }
 }

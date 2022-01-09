@@ -1,8 +1,6 @@
 ﻿using cl2j.WebCore.Routes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 
 namespace cl2j.WebCore.Resources
@@ -12,7 +10,7 @@ namespace cl2j.WebCore.Resources
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IResourceService resourceService;
         private readonly IRouteService routeService;
-        internal static string DefaultLanguage;
+        internal static string DefaultLanguage = "en";
 
         public ResourceManagerStringLocalizer(IHttpContextAccessor httpContextAccessor, IResourceService resourceService, IRouteService routeService)
         {
@@ -25,11 +23,14 @@ namespace cl2j.WebCore.Resources
 
         public LocalizedString this[string name, params object[] arguments] => GetValue(name, arguments);
 
-        public string GetLanguage(HttpRequest request)
+        public string GetLanguage(HttpRequest? request)
         {
-            var routeMatch = routeService.GetRouteWithUrlAsync(request.Path).Result;
-            if (routeMatch != null)
-                return routeMatch.Language;
+            if (request != null)
+            {
+                var routeMatch = routeService.GetRouteWithUrlAsync(request.Path).Result;
+                if (routeMatch != null)
+                    return routeMatch.Language;
+            }
 
             return DefaultLanguage;
         }
@@ -46,7 +47,7 @@ namespace cl2j.WebCore.Resources
 
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
-            var language = GetLanguage(httpContextAccessor.HttpContext.Request);
+            var language = GetLanguage(httpContextAccessor.HttpContext?.Request);
 
             var result = new List<LocalizedString>();
             var resourceCollection = resourceService.GetResourcesAsync().Result;
@@ -64,7 +65,7 @@ namespace cl2j.WebCore.Resources
 
         private LocalizedString GetValue(string name, params object[] arguments)
         {
-            var language = GetLanguage(httpContextAccessor.HttpContext.Request);
+            var language = GetLanguage(httpContextAccessor.HttpContext?.Request);
 
             var resourceCollection = resourceService.GetResourcesAsync().Result;
             var value = resourceCollection.Get(name, language, arguments);

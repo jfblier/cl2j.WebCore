@@ -13,7 +13,7 @@ namespace Microsoft.AspNetCore.Mvc.Rendering
             return localizer.GetLanguage(htmlHelper.ViewContext.HttpContext.Request);
         }
 
-        public static IHtmlContent Route(this IHtmlHelper htmlHelper, string routeName, string queryString = null)
+        public static IHtmlContent Route(this IHtmlHelper htmlHelper, string routeName, string? queryString = null)
         {
             var url = routeName;
 
@@ -22,7 +22,7 @@ namespace Microsoft.AspNetCore.Mvc.Rendering
             {
                 var route = routeService.GetRouteAsync(routeName).Result;
                 if (route == null)
-                    return null;
+                    return new HtmlString(String.Empty);
 
                 var language = htmlHelper.GetLanguage();
 
@@ -65,7 +65,7 @@ namespace Microsoft.AspNetCore.Mvc.Rendering
         public static IHtmlContent Localize(this IHtmlHelper htmlHelper, string resourceName, params object[] values)
         {
             var localizer = htmlHelper.GetStringLocalizer();
-            var resourceValue = localizer?.Localize(resourceName, values);
+            var resourceValue = localizer.Localize(resourceName, values);
 
             if (values != null && values.Length > 0)
                 resourceValue = string.Format(resourceValue, values);
@@ -90,18 +90,27 @@ namespace Microsoft.AspNetCore.Mvc.Rendering
         private static cl2j.WebCore.Resources.ResourceManagerStringLocalizer GetStringLocalizer(this IHtmlHelper htmlHelper)
         {
             var services = htmlHelper.ViewContext.HttpContext.RequestServices;
-            return services.GetService<IStringLocalizer>() as cl2j.WebCore.Resources.ResourceManagerStringLocalizer;
+
+            if (services.GetService<IStringLocalizer>() is not cl2j.WebCore.Resources.ResourceManagerStringLocalizer localizer)
+                throw new Exception("IStringLocalizer not configured.");
+
+            return localizer;
         }
 
         private static IRouteService GetRouteService(this IHtmlHelper htmlHelper)
         {
             var services = htmlHelper.ViewContext.HttpContext.RequestServices;
-            return services.GetService<IRouteService>();
+            var routeService = services.GetService<IRouteService>();
+
+            if (routeService == null)
+                throw new Exception("IRouteService not configured.");
+
+            return routeService;
         }
 
         private static string GetLanguage(this IHtmlHelper htmlHelper)
         {
-            return htmlHelper.GetStringLocalizer()?.GetLanguage(htmlHelper.ViewContext.HttpContext.Request);
+            return htmlHelper.GetStringLocalizer().GetLanguage(htmlHelper.ViewContext.HttpContext.Request);
         }
 
         #endregion Private

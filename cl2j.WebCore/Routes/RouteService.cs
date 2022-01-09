@@ -1,9 +1,5 @@
 ﻿using cl2j.DataStore.Core;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace cl2j.WebCore.Routes
 {
@@ -28,17 +24,17 @@ namespace cl2j.WebCore.Routes
             catch (Exception ex)
             {
                 logger.LogError(ex, $"Unexpected error");
-                return null;
+                return new List<Route>();
             }
         }
 
-        public async Task<Route> GetRouteAsync(string routeName)
+        public async Task<Route?> GetRouteAsync(string routeName)
         {
             var routes = await GetAllAsync();
             return routes.FirstOrDefault(r => r.Id == routeName);
         }
 
-        public async Task<RouteMatch> GetRouteWithUrlAsync(string url)
+        public async Task<RouteMatch?> GetRouteWithUrlAsync(string url)
         {
             url = CleanUrl(url);
 

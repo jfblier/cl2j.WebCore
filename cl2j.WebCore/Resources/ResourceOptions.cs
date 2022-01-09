@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace cl2j.WebCore.Resources
+﻿namespace cl2j.WebCore.Resources
 {
     public class ResourceOptions
     {
-        public ResourceOptions()
-        {
-            RefreshInterval = TimeSpan.FromSeconds(30 * 60);
-        }
-
-        public string DataStoreName { get; set; }
+        public string DataStoreName { get; set; } = null!;
         public IList<string> Languages { get; set; } = new List<string>();
-        public TimeSpan RefreshInterval { get; set; }
+        public TimeSpan RefreshInterval { get; set; } = TimeSpan.FromSeconds(30 * 60);
     }
 }

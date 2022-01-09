@@ -4,17 +4,14 @@ using cl2j.FileStorage.Extensions;
 using cl2j.Tooling;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace cl2j.WebCore.Resources
 {
     public class ResourceService : IResourceService
     {
         private readonly CacheLoader cacheLoader;
-        private ResourceCollection resourceCollection;
+        private ResourceCollection resourceCollection = new(new Dictionary<string, Localized<string>>());
 
         public ResourceService(IFileStorageFactory fileStorageFactory, IOptions<ResourceOptions> options, ILogger<ResourceService> logger)
         {

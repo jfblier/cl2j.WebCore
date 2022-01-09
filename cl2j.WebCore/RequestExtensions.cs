@@ -7,17 +7,19 @@ namespace cl2j.WebCore
     {
         public static string GetLanguage(this HttpRequest request)
         {
-            return request.GetStringLocalizer()?.GetLanguage(request);
+            return request.GetStringLocalizer().GetLanguage(request);
         }
 
         public static string Localize(this HttpRequest request, string resourceName, params object[] values)
         {
-            return request.GetStringLocalizer()?.Localize(resourceName, values);
+            return request.GetStringLocalizer().Localize(resourceName, values);
         }
 
-        private static cl2j.WebCore.Resources.ResourceManagerStringLocalizer GetStringLocalizer(this HttpRequest request)
+        private static Resources.ResourceManagerStringLocalizer GetStringLocalizer(this HttpRequest request)
         {
-            return request.HttpContext.RequestServices.GetService(typeof(IStringLocalizer)) as cl2j.WebCore.Resources.ResourceManagerStringLocalizer;
+            if (request.HttpContext.RequestServices.GetService(typeof(IStringLocalizer)) is not Resources.ResourceManagerStringLocalizer localizer)
+                throw new Exception("IStringLocalizer not configured");
+            return localizer;
         }
     }
 }

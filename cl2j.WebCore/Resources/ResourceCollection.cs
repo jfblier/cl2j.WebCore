@@ -1,5 +1,4 @@
 ﻿using cl2j.Tooling;
-using System.Collections.Generic;
 
 namespace cl2j.WebCore.Resources
 {
@@ -12,7 +11,7 @@ namespace cl2j.WebCore.Resources
             values = resources;
         }
 
-        public Localized<string> Get(string key)
+        public Localized<string>? Get(string key)
         {
             if (!values.TryGetValue(key, out var localizeString))
                 return null;
