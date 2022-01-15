@@ -6,7 +6,7 @@ namespace cl2j.WebCore
     {
         public static string Domain { get; set; } = "";
 
-        public static string GetCanonicalUrl(this IUrlHelper url, string canonicalUrl)
+        public static string GetCanonicalUrl(this IUrlHelper url, string? canonicalUrl)
         {
             if (string.IsNullOrEmpty(canonicalUrl))
             {
@@ -14,7 +14,7 @@ namespace cl2j.WebCore
                 return Domain + request.Path + request.QueryString.ToString();
             }
 
-            return Domain + canonicalUrl;
+            return Domain + (!Domain.EndsWith('/') && !canonicalUrl.EndsWith('/') ? "/" : string.Empty) + canonicalUrl;
         }
     }
 }
